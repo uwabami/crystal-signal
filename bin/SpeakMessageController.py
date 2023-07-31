@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import os
 import threading
@@ -8,8 +8,8 @@ from subprocess import call, Popen, PIPE, STDOUT
 import json
 
 # - - - - - - - - - - - - - - - - - -
-# - -  SPEAK MESSAGE CONTROLLER - - -  
-# - - - - - - - - - - - - - - - - - - 
+# - -  SPEAK MESSAGE CONTROLLER - - -
+# - - - - - - - - - - - - - - - - - -
 class SpeakMessageController:
     def __init__(self, audioPath):
         self.audioFilePath = audioPath
@@ -23,7 +23,7 @@ class SpeakMessageController:
             'Mei (angry)' : [meiVoiceDirPath + 'mei_angry.htsvoice', 'f'],
             'Mei (sad)' : [meiVoiceDirPath + 'mei_sad.htsvoice', 'f']
             }
-        # DropDownNameToOptionDict is used for the espeak plugin (e.g. english) 
+        # DropDownNameToOptionDict is used for the espeak plugin (e.g. english)
         self.DropDownNameToOptionDict = {
             'f1' : ['f1', 'f'],
             'f2' : ['f2', 'f'],
@@ -42,12 +42,12 @@ class SpeakMessageController:
         # in respect to the current language ...
         tmp = []
         if (language == 'japanese'):
-            for key, tuple_ in self.DropDownNameToFilePathDict.items():
+            for key, tuple_ in list(self.DropDownNameToFilePathDict.items()):
                 tmp.append([key, tuple_[1]])
                 tmp.sort(key=lambda tup: tup[0])
             return tmp
         elif (language == 'english'):
-            for key, tuple_ in self.DropDownNameToOptionDict.items():
+            for key, tuple_ in list(self.DropDownNameToOptionDict.items()):
                 tmp.append([key, tuple_[1]])
                 tmp.sort(key=lambda tup: tup[0])
             return tmp
@@ -56,22 +56,22 @@ class SpeakMessageController:
     def createAndPlayAudio(self, audioString, voiceName, language):
         if language == 'japanese':
             voicePath = self.getFullFilePath(voiceName)
-            print voicePath
-            args = ["open_jtalk", 
-                    "-m", voicePath, 
-                    "-x", "/var/lib/mecab/dic/open-jtalk/naist-jdic", 
+            print(voicePath)
+            args = ["open_jtalk",
+                    "-m", voicePath,
+                    "-x", "/var/lib/mecab/dic/open-jtalk/naist-jdic",
                     "-ow", self.audioFilePath]
             self.popenAndCall(self.onFinishJTalk, args, audioString)
         elif language == 'english':
             print(voiceName)
-            args = ["espeak", 
-                    "-ven+" + voiceName, 
-                    "-s120", "-g0", "-p80", 
+            args = ["espeak",
+                    "-ven+" + voiceName,
+                    "-s120", "-g0", "-p80",
                     "--stdin"]
             self.popenAndCall(self.onFinishEspeak, args, audioString)
 
     def getFullFilePath(self, voiceName):
-        if voiceName in self.DropDownNameToFilePathDict.keys():
+        if voiceName in list(self.DropDownNameToFilePathDict.keys()):
             return self.DropDownNameToFilePathDict[voiceName][0]
         else:
             # return Mei (happy) as default if no key fits.
@@ -99,5 +99,5 @@ class SpeakMessageController:
         return thread
 
 # - - - - - - - - - - - - - - - - - -
-# - - - - - - - MEMO  - - - - - - - -  
-# - - - - - - - - - - - - - - - - - - 
+# - - - - - - - MEMO  - - - - - - - -
+# - - - - - - - - - - - - - - - - - -
