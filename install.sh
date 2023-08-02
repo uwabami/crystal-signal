@@ -118,7 +118,7 @@ function set_timezone
 function install_pigpiod
 {
     apt_update
-    $APT install -y pigpio python-pigpio
+    $APT install -y pigpio python3-pigpio
     $SYSTEMCTL enable pigpiod.service
     $SYSTEMCTL restart pigpiod.service
 }
